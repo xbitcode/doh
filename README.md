@@ -1,15 +1,101 @@
-# doh_api_client
+# DoH API Client Flutter Package
 
-A new Flutter project.
+A Flutter package that provides an API client using the DNS over HTTPS (DoH) protocol, implemented with Kotlin Native code for optimal performance.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/to/develop-plugins),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+- Perform HTTP requests (GET, POST, PUT, PATCH, DELETE) using DoH protocol
+- Support for 12 different DoH providers
+- Easy integration with Flutter projects
+- Kotlin Native implementation for improved performance (Also because it is only possible through native code)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
 
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  doh_api_client: ^1.0.0
+```
+
+Then run:
+
+```
+flutter pub get
+```
+
+## Usage
+
+First, import the package in your Dart file:
+
+```dart
+import 'package:doh_api_client/doh_api_client.dart';
+```
+
+### Making API Requests
+
+Here's an example of how to make a POST request using the DoH API client:
+
+```dart
+final _dohApiClientPlugin = DohApiClient();
+
+try {
+  String apiPostRequest = await _dohApiClientPlugin.post(
+    url: "https://jsonplaceholder.typicode.com/posts",
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: jsonEncode({
+      "title": 'foo',
+      "body": 'bar',
+      "userId": 1,
+    }),
+    dohProvider: DohProvider.CloudFlare
+  );
+  print(apiPostRequest);
+} catch (e) {
+  print("Error occurred: $e");
+}
+```
+
+### Available DoH Providers
+
+The package supports the following DoH providers:
+
+- CloudFlare
+- Google
+- AdGuard
+- Quad9
+- AliDNS
+- DNSPod
+- threeSixty
+- Quad101
+- Mullvad
+- ControlD
+- Najalla
+- SheCan
+
+You can specify the DoH provider using the `DohProvider` enum when making requests.
+
+## API Reference
+
+### DohApiClient
+
+The main class for making API requests.
+
+Methods:
+
+- `Future<String?> get({required String url, Map<String, String>? headers, DohProvider dohProvider})`
+- `Future<String?> post({required String url, Map<String, String>? headers, required String body, DohProvider dohProvider})`
+- `Future<String?> put({required String url, Map<String, String>? headers, required String body, DohProvider dohProvider})`
+- `Future<String?> patch({required String url, Map<String, String>? headers, required String body, DohProvider dohProvider})`
+- `Future<String?> delete({required String url, Map<String, String>? headers, DohProvider dohProvider})`
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/ShalmonAnandas/doh_api_client/blob/main/LICENSE) file for details.

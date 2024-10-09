@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:doh_api_client/doh_api_client_method_channel.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:doh_api_client/doh_api_client.dart';
 
 void main() {

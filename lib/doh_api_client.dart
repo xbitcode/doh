@@ -1,5 +1,3 @@
-import 'package:doh_api_client/doh_api_client_method_channel.dart';
-
 import 'doh_api_client_platform_interface.dart';
 
 class DohApiClient {

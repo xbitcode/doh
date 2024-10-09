@@ -1,7 +1,8 @@
 name: doh_api_client
-description: "A new Flutter project."
-version: 0.0.1
-homepage:
+description: "A Simple API Client that implemented DoH (DNS over HTTPS) protocol using Native Method Channels."
+version: 1.0.0
+#homepage:
+repository: https://github.com/ShalmonAnandas/doh_api_client
 
 environment:
   sdk: ^3.5.3

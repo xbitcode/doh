@@ -8,12 +8,6 @@ class MockDohApiClientPlatform
     with MockPlatformInterfaceMixin
     implements DohApiClientPlatform {
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
-
-  @override
-  Future<String?> checkPluginFunc() => Future.value("true");
-
-  @override
   Future<String?> get(
           String url, Map<String, dynamic>? headers, DohProvider dohProvider) =>
       Future.value("");
@@ -47,7 +41,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    DohApiClient dohApiClientPlugin = DohApiClient();
     MockDohApiClientPlatform fakePlatform = MockDohApiClientPlatform();
     DohApiClientPlatform.instance = fakePlatform;
   });
