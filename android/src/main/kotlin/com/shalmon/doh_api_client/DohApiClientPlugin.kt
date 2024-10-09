@@ -22,6 +22,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
+import javax.net.ssl.SSLSocketFactory;
 
 /// DOH PRoviders
 import com.shalmon.doh_api_client.dohCloudflare
@@ -51,11 +52,7 @@ class DohApiClientPlugin : FlutterPlugin, MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "getPlatformVersion") {
-            result.success("Android ${android.os.Build.VERSION.RELEASE}")
-        } else if (call.method == "test-plugin-functionality") {
-            result.success("true")
-        } else if (call.method == "makeGetRequest") {
+        if (call.method == "makeGetRequest") {
             val url = call.argument<String>("url")
             val headers = call.argument<Map<String, String>>("headers")
             val dohProvider = call.argument<String>("dohProvider")!!
@@ -86,6 +83,53 @@ class DohApiClientPlugin : FlutterPlugin, MethodCallHandler {
                     }
                 }
             }
+        } else if (call.method == "makePutRequest") {
+            val url = call.argument<String>("url")
+            val headers = call.argument<Map<String, String>>("headers")
+            val body = call.argument<String>("body")
+            val dohProvider = call.argument<String>("dohProvider")!!
+            if (url != null) {
+                ApiClient(dohProvider).makePutRequest(
+                    url, headers ?: emptyMap(), body
+                ) { response, error -> // Pass headers to ApiClient
+                    if (error != null) {
+                        result.error("PUT_API_ERROR", error, null)
+                    } else {
+                        result.success(response)
+                    }
+                }
+            }
+        } else if (call.method == "makePatchRequest") {
+            val url = call.argument<String>("url")
+            val headers = call.argument<Map<String, String>>("headers")
+            val body = call.argument<String>("body")
+            val dohProvider = call.argument<String>("dohProvider")!!
+            if (url != null) {
+                ApiClient(dohProvider).makePatchRequest(
+                    url, headers ?: emptyMap(), body
+                ) { response, error -> // Pass headers to ApiClient
+                    if (error != null) {
+                        result.error("PATCH_API_ERROR", error, null)
+                    } else {
+                        result.success(response)
+                    }
+                }
+            }
+        } else if (call.method == "makeDeleteRequest") {
+            val url = call.argument<String>("url")
+            val headers = call.argument<Map<String, String>>("headers")
+            val dohProvider = call.argument<String>("dohProvider")!!
+            if (url != null) {
+                ApiClient(dohProvider).makeDeleteRequest(
+                    url, headers ?: emptyMap()
+                ) { response, error -> // Pass headers to ApiClient
+                    if (error != null) {
+                        result.error("DELETE_API_ERROR", error, null)
+                    } else {
+                        result.success(response)
+                    }
+                }
+            }
         } else {
             result.notImplemented()
         }
@@ -98,24 +142,13 @@ class DohApiClientPlugin : FlutterPlugin, MethodCallHandler {
 
 class ApiClient(dohProvider: String) {
 
-    
-
     private val client: OkHttpClient
 
     init {
-        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {}
-            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {}
-            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-        })
-    
-        // Install the all-trusting trust manager
-        val sslContext = SSLContext.getInstance("SSL")
-        sslContext.init(null, trustAllCerts, java.security.SecureRandom())
 
         // Create the OkHttpClient based on the selected DoH provider
         val dnsBuilder = when (dohProvider) {
-            "CloudFlare" -> OkHttpClient.Builder().sslSocketFactory(sslContext.sslSocketFactory, trustAllCerts[0] as X509TrustManager).followRedirects(true).followSslRedirects(true).dohCloudflare().build()
+            "CloudFlare" -> OkHttpClient.Builder().dohCloudflare().build()
             "Google" -> OkHttpClient.Builder().dohGoogle().build()
             "AdGuard" -> OkHttpClient.Builder().dohAdGuard().build()
             "Quad9" -> OkHttpClient.Builder().dohQuad9().build()
@@ -172,7 +205,8 @@ class ApiClient(dohProvider: String) {
         }
 
         // Add body to the request
-        val requestBody: RequestBody = body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
+        val requestBody: RequestBody =
+            body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
         val request = builder.post(requestBody).build()
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
@@ -202,7 +236,8 @@ class ApiClient(dohProvider: String) {
         }
 
         // Add body to the request
-        val requestBody: RequestBody = body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
+        val requestBody: RequestBody =
+            body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
         val request = builder.put(requestBody).build()
 
         client.newCall(request).enqueue(object : okhttp3.Callback {
@@ -232,7 +267,8 @@ class ApiClient(dohProvider: String) {
         }
 
         // Add body to the request
-        val requestBody: RequestBody = body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
+        val requestBody: RequestBody =
+            body?.let { okhttp3.RequestBody.create("application/json".toMediaTypeOrNull(), it) }!!
         val request = builder.patch(requestBody).build()
 
         client.newCall(request).enqueue(object : okhttp3.Callback {

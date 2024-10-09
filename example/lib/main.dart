@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:doh_api_client/doh_api_client_method_channel.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -17,10 +19,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  String _pluginWorking = "false";
   final _dohApiClientPlugin = DohApiClient();
   String _apiGetRequest = "";
+  String _apiPostRequest = "";
+  String _apiPutRequest = "";
+  String _apiPatchRequest = "";
+  String _apiDeleteRequest = "";
 
   @override
   void initState() {
@@ -30,40 +34,129 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    String pluginWorking;
     String apiGetRequest;
+    String apiPostRequest;
+    String apiPutRequest;
+    String apiPatchRequest;
+    String apiDeleteRequest;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
+
     try {
-      platformVersion = await _dohApiClientPlugin.getPlatformVersion() ??
-          'Unknown platform version';
-      pluginWorking = await _dohApiClientPlugin.checkPluginFunc() ?? "false";
       apiGetRequest = await _dohApiClientPlugin.get(
-              url: "https://demo1236495.mockable.io/getRequest",
+              url: "https://jsonplaceholder.typicode.com/posts/1",
               headers: {
                 "User-Agent":
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
               },
               dohProvider: DohProvider.CloudFlare) ??
-          "Called by Failure";
+          "Method Channel Called for GET Request but Failure Received";
+      setState(() {
+        _apiGetRequest = apiGetRequest;
+      });
     } catch (e) {
-      print(e);
-      platformVersion = 'Failed to get platform version.';
-      pluginWorking = "false";
-      apiGetRequest = "failure";
+      apiGetRequest = "Method Channel Failed to call for GET Request";
+      setState(() {
+        _apiGetRequest = apiGetRequest;
+      });
     }
 
+    try {
+      apiPostRequest = await _dohApiClientPlugin.post(
+              url: "https://jsonplaceholder.typicode.com/posts",
+              headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                'Content-type': 'application/json; charset=UTF-8'
+              },
+              body: jsonEncode({
+                "title": 'foo',
+                "body": 'bar',
+                "userId": 1,
+              }),
+              dohProvider: DohProvider.CloudFlare) ??
+          "Method Channel Called for POST Request but Failure Received";
+      setState(() {
+        _apiPostRequest = apiPostRequest;
+      });
+    } catch (e) {
+      apiPostRequest = "Method Channel Failed to call for POST Request";
+      setState(() {
+        _apiPostRequest = apiPostRequest;
+      });
+    }
+
+    try {
+      apiPutRequest = await _dohApiClientPlugin.put(
+              url: "https://jsonplaceholder.typicode.com/posts/1",
+              headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                'Content-type': 'application/json; charset=UTF-8'
+              },
+              body: jsonEncode({
+                "id": 1,
+                "title": 'foo',
+                "body": 'bar',
+                "userId": 1,
+              }),
+              dohProvider: DohProvider.CloudFlare) ??
+          "Method Channel Called for PUT Request but Failure Received";
+      setState(() {
+        _apiPutRequest = apiPutRequest;
+      });
+    } catch (e) {
+      apiPutRequest = "Method Channel Failed to call for PUT Request";
+      setState(() {
+        _apiPutRequest = apiPutRequest;
+      });
+    }
+
+    try {
+      apiPatchRequest = await _dohApiClientPlugin.patch(
+              url: "https://jsonplaceholder.typicode.com/posts/1",
+              headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                'Content-type': 'application/json; charset=UTF-8'
+              },
+              body: jsonEncode({
+                "title": 'foo',
+              }),
+              dohProvider: DohProvider.CloudFlare) ??
+          "Method Channel Called for PATCH Request but Failure Received";
+      setState(() {
+        _apiPatchRequest = apiPatchRequest;
+      });
+    } catch (e) {
+      apiPatchRequest = "Method Channel Failed to call for PATCH Request";
+      setState(() {
+        _apiPatchRequest = apiPatchRequest;
+      });
+    }
+
+    try {
+      apiDeleteRequest = await _dohApiClientPlugin.delete(
+              url: "https://jsonplaceholder.typicode.com/posts/1",
+              headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+              },
+              dohProvider: DohProvider.CloudFlare) ??
+          "Method Channel Called for DELETE Request but Failure Received";
+      setState(() {
+        _apiDeleteRequest = apiDeleteRequest;
+      });
+    } catch (e) {
+      apiDeleteRequest = "Method Channel Failed to call for DELETE Request";
+      setState(() {
+        _apiDeleteRequest = apiDeleteRequest;
+      });
+    }
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-      _pluginWorking = pluginWorking;
-      _apiGetRequest = apiGetRequest;
-    });
   }
 
   @override
@@ -71,11 +164,74 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('DoH API Client Example'),
         ),
-        body: Center(
-          child: Text(
-              'Running on: $_platformVersion\n $_pluginWorking\n $_apiGetRequest'),
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("GET Request: "),
+                    _apiGetRequest.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Expanded(child: Text(_apiGetRequest)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("POST Request: "),
+                    _apiPostRequest.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Expanded(child: Text(_apiPostRequest)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("PUT Request: "),
+                    _apiPutRequest.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Expanded(child: Text(_apiPutRequest)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("PATCH Request: "),
+                    _apiPatchRequest.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Expanded(child: Text(_apiPatchRequest)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("DELETE Request: "),
+                    _apiDeleteRequest.isEmpty
+                        ? const CircularProgressIndicator()
+                        : Expanded(child: Text(_apiDeleteRequest)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

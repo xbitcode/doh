@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'doh_api_client.dart';
 import 'doh_api_client_method_channel.dart';
 
 abstract class DohApiClientPlatform extends PlatformInterface {
@@ -23,15 +24,28 @@ abstract class DohApiClientPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
-  Future<String?> checkPluginFunc() {
-    throw UnimplementedError('checkPluginFunc() has not been implemented');
-  }
-
-  Future<String?> get(String url, Map<String, dynamic> headers, DohProvider dohProvider) {
+  Future<String?> get(
+      String url, Map<String, dynamic> headers, DohProvider dohProvider) {
     throw UnimplementedError('get() has not been implemented');
+  }
+
+  Future<String?> post(String url, Map<String, dynamic> headers, String body,
+      DohProvider dohProvider) {
+    throw UnimplementedError('post() has not been implemented');
+  }
+
+  Future<String?> put(String url, Map<String, dynamic> headers, String body,
+      DohProvider dohProvider) {
+    throw UnimplementedError('put() has not been implemented');
+  }
+
+  Future<String?> patch(String url, Map<String, dynamic> headers, String body,
+      DohProvider dohProvider) {
+    throw UnimplementedError('patch() has not been implemented');
+  }
+
+  Future<String?> delete(
+      String url, Map<String, dynamic> headers, DohProvider dohProvider) {
+    throw UnimplementedError('patch() has not been implemented');
   }
 }

@@ -14,7 +14,28 @@ class MockDohApiClientPlatform
   Future<String?> checkPluginFunc() => Future.value("true");
 
   @override
-  Future<String?> get(String url, Map<String, dynamic>? headers, DohProvider dohProvider) =>
+  Future<String?> get(
+          String url, Map<String, dynamic>? headers, DohProvider dohProvider) =>
+      Future.value("");
+
+  @override
+  Future<String?> post(String url, Map<String, dynamic>? headers, String? body,
+          DohProvider dohProvider) =>
+      Future.value("");
+
+  @override
+  Future<String?> put(String url, Map<String, dynamic>? headers, String? body,
+          DohProvider dohProvider) =>
+      Future.value("");
+
+  @override
+  Future<String?> patch(String url, Map<String, dynamic>? headers, String? body,
+          DohProvider dohProvider) =>
+      Future.value("");
+
+  @override
+  Future<String?> delete(
+          String url, Map<String, dynamic>? headers, DohProvider dohProvider) =>
       Future.value("");
 }
 
@@ -29,7 +50,5 @@ void main() {
     DohApiClient dohApiClientPlugin = DohApiClient();
     MockDohApiClientPlatform fakePlatform = MockDohApiClientPlatform();
     DohApiClientPlatform.instance = fakePlatform;
-
-    expect(await dohApiClientPlugin.getPlatformVersion(), '42');
   });
 }
