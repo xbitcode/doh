@@ -1,13 +1,13 @@
 # DoH API Client Flutter Package
 
-A Flutter package that provides an API client using the DNS over HTTPS (DoH) protocol, implemented with Kotlin Native code for optimal performance.
+A Flutter package that provides an API client using the DNS over HTTPS (DoH) protocol, implemented with Native code for optimal performance.
 
 ## Features
 
 - Perform HTTP requests (GET, POST, PUT, PATCH, DELETE) using DoH protocol
 - Support for 12 different DoH providers
 - Easy integration with Flutter projects
-- Kotlin Native implementation for improved performance (Also because it is only possible through native code)
+- Native implementation for improved performance (Also because it is only possible through native code) [OKHTTP on Android and URLSession on IOS]
 
 ## Installation
 
