@@ -13,3 +13,7 @@
 ## 1.0.2
 
 * Updated Changelog to include 1.0.0 release because publishing failed
+
+## 1.0.3
+
+* Updated version in pubspec
