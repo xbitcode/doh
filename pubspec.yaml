@@ -38,6 +38,10 @@ flutter:
       android:
         package: com.shalmon.doh_api_client
         pluginClass: DohApiClientPlugin
+      ios:
+        package: com.shalmon.doh_api_client
+        pluginClass: DohApiClientPlugin
+
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
