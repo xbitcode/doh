@@ -6,6 +6,10 @@
 
 * updated release
 
-## 1.0.1
+## 1.0.1    
 
 * Added support for IOS
+
+## 1.0.2
+
+* Updated Changelog to include 1.0.0 release because publishing failed
