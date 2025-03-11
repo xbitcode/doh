@@ -1,11 +1,11 @@
 name: doh_api_client
 description: "A Simple API Client that implemented DoH (DNS over HTTPS) protocol using Native Method Channels."
-version: 1.0.3
+version: 1.0.4
 #homepage:
-repository: https://github.com/ShalmonAnandas/doh_api_client
+repository: https://github.com/xbitcode/doh_api_client
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.5.0
   flutter: '>=3.3.0'
 
 dependencies:
